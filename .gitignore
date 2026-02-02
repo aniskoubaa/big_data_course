@@ -31,6 +31,12 @@ quizzes/
 *.aux
 *.out
 *.toc
+*.nav
+*.snm
+*.vrb
+*.synctex.gz
+*.fls
+*.fdb_latexmk
 
 # OS files
 .DS_Store
