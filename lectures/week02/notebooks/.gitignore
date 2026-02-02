@@ -1,0 +1,29 @@
+# SE446 - HDFS Notebooks
+# Ignore sensitive credential files
+
+# Environment files with real credentials
+.env
+*.env.local
+
+# Keep the example
+!.env.example
+
+# Jupyter checkpoint files
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
