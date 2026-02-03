@@ -37,7 +37,10 @@ Open your terminal and connect to the cluster:
 ssh <your_username>@134.209.172.50
 ```
 
+**💡 Command Meaning:** Connect securely to the remote server using the SSH protocol.
+
 **Example:**
+
 ```bash
 ssh akoubaa@134.209.172.50
 ```
@@ -48,24 +51,24 @@ Enter your password when prompted (from your credentials email).
 
 > [!CAUTION]
 > **CRITICAL: Two Separate Filesystems!**
-> 
+>
 > The cluster has **TWO** different filesystems. Do not confuse them!
-> 
+>
 > 1. **Linux Filesystem (Local)**
 >    - Path: `/home/akoubaa`
 >    - Commands: `cd`, `ls`, `cat`, `pwd`
 >    - This is where you are when you login via SSH.
-> 
 > 2. **HDFS Filesystem (Distributed)**
 >    - Path: `/user/akoubaa`
 >    - Commands: `hdfs dfs -ls`, `hdfs dfs -cat`, etc.
 >    - **You CANNOT use `cd` into HDFS!** It is not a mountable filesystem.
 >
 > **Common Mistake:**
+>
 > ```bash
 > # ❌ WRONG - This will fail!
 > cd /user/akoubaa
-> 
+>
 > # ✅ CORRECT
 > hdfs dfs -ls /user/akoubaa
 > ```
@@ -82,7 +85,10 @@ See overall cluster health and capacity:
 hdfs dfsadmin -report
 ```
 
+**💡 Command Meaning:** Generate a report on the health and status of the HDFS cluster (DataNodes, capacity, etc.).
+
 **Sample Output:**
+
 ```
 Configured Capacity: 102719209472 (95.66 GB)
 Present Capacity: 90407325696 (84.20 GB)
@@ -97,6 +103,7 @@ Live datanodes (2): ...
 ```
 
 **What to look for:**
+
 - **Configured Capacity:** Total storage (~95 GB)
 - **DFS Used:** How much space is occupied
 - **Live datanodes:** Should show 2 worker nodes
@@ -114,7 +121,10 @@ See what HDFS services are running:
 jps
 ```
 
+**💡 Command Meaning:** List all running **Java Process Status** (Hadoop services run on Java).
+
 **You should see:**
+
 - No NameNode (you're on a client machine)
 - DataNode processes may appear if you're on a worker node
 
@@ -130,22 +140,31 @@ View important cluster settings:
 hdfs getconf -confKey dfs.replication
 ```
 
+**💡 Command Meaning:** Get the value of a specific configuration key (here, the default replication factor).
+
 **Expected output:**
+
 ```
 2
 ```
+
 (each file is replicated 2 times)
 
 Try these too:
+
 ```bash
 # Block size (how large each block is)
 hdfs getconf -confKey dfs.blocksize
 ```
 
+**💡 Command Meaning:** Get the default block size (chunk size) for new files.
+
 **Sample Output:**
+
 ```
 134217728
 ```
+
 (134217728 bytes = 128 MB)
 
 ```bash
@@ -153,7 +172,10 @@ hdfs getconf -confKey dfs.blocksize
 hdfs getconf -confKey fs.defaultFS
 ```
 
+**💡 Command Meaning:** Get the default file system URI (the NameNode's address).
+
 **Sample Output:**
+
 ```
 hdfs://0.0.0.0:9000
 ```
@@ -172,7 +194,10 @@ Check your personal HDFS directory:
 hdfs dfs -ls /user/<your_username>
 ```
 
+**💡 Command Meaning:** List files and directories in the specified path.
+
 **Example:**
+
 ```bash
 hdfs dfs -ls /user/akoubaa
 ```
@@ -197,7 +222,10 @@ hdfs dfs -mkdir -p /user/<your_username>/data/input
 hdfs dfs -mkdir -p /user/<your_username>/data/output
 ```
 
+**💡 Command Meaning:** Create a new directory. Flag `-p` creates parent directories if they don't exist.
+
 **Verify:**
+
 ```bash
 hdfs dfs -ls /user/<your_username>
 hdfs dfs -ls -R /user/<your_username>
@@ -214,6 +242,7 @@ hdfs dfs -ls /user/<your_username>
 ```
 
 **Understanding the output:**
+
 ```bash
 drwxr-xr-x   - akoubaa hadoop          0 2026-02-02 10:30 /user/akoubaa/lab01
 ```
@@ -244,6 +273,7 @@ echo "HDFS stores data in blocks." >> test.txt
 This creates `test.txt` in your **Linux home directory** on the server (`/home/<your_username>/test.txt`)
 
 **Verify local file:**
+
 ```bash
 cat test.txt
 ls -lh test.txt
@@ -255,7 +285,10 @@ ls -lh test.txt
 hdfs dfs -put test.txt /user/<your_username>/lab01/
 ```
 
+**💡 Command Meaning:** Upload a file from the Local Filesystem -> HDFS. (`put` = copyFromLocal)
+
 **What's happening:**
+
 - Source: `/home/<your_username>/test.txt` (Linux filesystem on the server)
 - Destination: `/user/<your_username>/lab01/test.txt` (HDFS distributed filesystem)
 - The `hdfs dfs -put` command is available because you're ON the server where Hadoop is installedy the file from local to HDFS:
@@ -265,12 +298,16 @@ hdfs dfs -put test.txt /user/<your_username>/lab01/
 ```
 
 **Alternative methods:**
+
 ```bash
 # Same as -put
 hdfs dfs -copyFromLocal test.txt /user/<your_username>/lab01/test2.txt
 ```
 
+**💡 Command Meaning:** Same as `-put`. Copies a file from local to HDFS.
+
 **Verify upload:**
+
 ```bash
 hdfs dfs -ls /user/<your_username>/lab01/
 ```
@@ -282,6 +319,7 @@ hdfs dfs -ls /user/<your_username>/lab01/
 If you have a file on your **local laptop** and want to upload it to HDFS:
 
 **Visual Flow:**
+
 ```
 ┌─────────────────────────┐
 │  Your Laptop            │
@@ -345,10 +383,15 @@ Display file contents:
 hdfs dfs -cat /user/<your_username>/lab01/test.txt
 ```
 
+**💡 Command Meaning:** Display the contents of a file in the terminal.
+
 **Alternative:** View first few lines only:
+
 ```bash
 hdfs dfs -head /user/<your_username>/lab01/test.txt
 ```
+
+**💡 Command Meaning:** Display the first 1KB of the file. Useful for peeking at large files.
 
 ---
 
@@ -364,6 +407,7 @@ dd if=/dev/urandom of=bigfile.dat bs=1M count=150
 ```
 
 **Check local file size:**
+
 ```bash
 ls -lh bigfile.dat
 ```
@@ -375,6 +419,8 @@ ls -lh bigfile.dat
 ```bash
 hdfs dfs -put bigfile.dat /user/<your_username>/lab01/
 ```
+
+**💡 Command Meaning:** Upload the large file to HDFS (it will be split into blocks).
 
 ⏱️ **This will take ~10-30 seconds depending on network speed.**
 
@@ -388,13 +434,17 @@ View detailed information about the file:
 hdfs fsck /user/<your_username>/lab01/bigfile.dat -files -blocks -locations
 ```
 
+**💡 Command Meaning:** File System Check. Checks health, block locations, and replication status of a file.
+
 **What you'll see:**
+
 - **Total size:** ~150 MB
 - **Number of blocks:** 2 (one 128 MB block + one smaller block)
 - **Block locations:** Which DataNodes store each block
 - **Replication:** Each block appears on 2 DataNodes
 
-**📝 Exercise:** 
+**📝 Exercise:**
+
 1. How many blocks does your file have?
 2. On which DataNodes are the blocks stored?
 3. How many replicas exist in total?
@@ -409,6 +459,8 @@ Get quick file info:
 hdfs dfs -stat "Size: %b bytes, Replication: %r, Block Size: %o" /user/<your_username>/lab01/bigfile.dat
 ```
 
+**💡 Command Meaning:** tailored format to display file statistics (size, replication, block size).
+
 ---
 
 ## 🔄 Part 6: File Operations
@@ -420,6 +472,8 @@ hdfs dfs -stat "Size: %b bytes, Replication: %r, Block Size: %o" /user/<your_use
 hdfs dfs -cp /user/<your_username>/lab01/test.txt /user/<your_username>/data/input/
 ```
 
+**💡 Command Meaning:** Copy a file from one HDFS path to another HDFS path. (Source remains).
+
 ---
 
 ### Step 6.2: Move/Rename Files
@@ -428,26 +482,33 @@ hdfs dfs -cp /user/<your_username>/lab01/test.txt /user/<your_username>/data/inp
 # Rename a file
 hdfs dfs -mv /user/<your_username>/lab01/test2.txt /user/<your_username>/lab01/renamed.txt
 ```
+
+**💡 Command Meaning:** Move or Rename a file within HDFS. (Original source is removed).
 **HDFS** → **server's Linux filesystem**:
 
 ```bash
 hdfs dfs -get /user/<your_username>/lab01/test.txt downloaded_test.txt
 ```
 
+**💡 Command Meaning:** Download a file from HDFS -> Local Filesystem. (`get` = copyToLocal)
+
 This downloads to: `/home/<your_username>/downloaded_test.txt` on the server
 
 **Verify:**
+
 ```bash
 cat downloaded_test.txt
 ```
 
 > 💡 **To get files to your laptop:** You would then use `scp` to copy from server to your computer:
+>
 > ```bash
 > # On your laptop (in a new terminal, not SSH'd):
 > scp <your_username>@134.209.172.50:/home/<your_username>/downloaded_test.txt .
 > ```
 
 **Verify:**
+
 ```bash
 cat downloaded_test.txt
 ```
@@ -466,6 +527,8 @@ hdfs dfs -rm /user/<your_username>/lab01/renamed.txt
 hdfs dfs -rm -r /user/<your_username>/lab01/temp
 ```
 
+**💡 Command Meaning:** Remove a file or directory from HDFS. Use `-r` for recursive delete.
+
 ---
 
 ## 📊 Part 7: Cluster Metadata Analysis
@@ -482,6 +545,8 @@ hdfs dfs -du -h /user/<your_username>
 hdfs dfs -du -s -h /user/<your_username>
 ```
 
+**💡 Command Meaning:** Display Disk Usage. `-h` makes sizes human-readable (KB, MB, GB).
+
 **Expected:** ~300 MB (150 MB file × 2 replicas)
 
 ---
@@ -492,7 +557,10 @@ hdfs dfs -du -s -h /user/<your_username>
 hdfs dfs -count /user/<your_username>
 ```
 
+**💡 Command Meaning:** Count the number of directories, files, and bytes under a path.
+
 **Output format:**
+
 ```
 DIR_COUNT   FILE_COUNT   CONTENT_SIZE   PATHNAME
 ```
@@ -506,6 +574,8 @@ Check your storage limit:
 ```bash
 hdfs dfs -count -q /user/<your_username>
 ```
+
+**💡 Command Meaning:** Show quotas (name quota and size quota) for a directory.
 
 **Note:** You have a 300 MB quota per student.
 
@@ -536,9 +606,12 @@ hdfs fsck / -list-corruptfileblocks
 **Expected:** Permission denied (students don't have access to run fsck on root).
 
 **Alternative - Check your own files:**
+
 ```bash
 hdfs fsck /user/<your_username> -list-corruptfileblocks
 ```
+
+**💡 Command Meaning:** Check for corrupted blocks within your personal user directory.
 
 **Expected:** No corrupt blocks in your directory.
 
