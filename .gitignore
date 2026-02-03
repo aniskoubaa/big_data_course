@@ -11,6 +11,11 @@ cluster_setup/
 student_access/
 students_list/
 
+# Private files and folders (starting with underscore)
+_*
+**/_*
+
+
 textbook/
 
 # Quizzes
@@ -57,3 +62,4 @@ logs/
 *_SOLUTIONS.ipynb
 *_solutions.ipynb
 instructor/
+

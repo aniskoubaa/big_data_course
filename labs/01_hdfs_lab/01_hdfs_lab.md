@@ -456,7 +456,14 @@ See if any blocks are under-replicated:
 hdfs fsck / -list-corruptfileblocks
 ```
 
-**Expected:** No corrupt blocks.
+**Expected:** Permission denied (students don't have access to run fsck on root).
+
+**Alternative - Check your own files:**
+```bash
+hdfs fsck /user/<your_username> -list-corruptfileblocks
+```
+
+**Expected:** No corrupt blocks in your directory.
 
 ---
 
