@@ -231,7 +231,9 @@ drwxr-xr-x   - akoubaa hadoop          0 2026-02-02 10:30 /user/akoubaa/lab01
 
 ### Step 4.1: Create a Test File
 
-Create a small file on the local filesystem:
+Create a small file on the **server's local Linux filesystem** (you're already SSH'd into the server):
+
+> 💡 **Note:** You don't need HDFS installed on your laptop! After SSH, you're working ON the cluster server which has HDFS. The commands below run on that server.
 
 ```bash
 echo "Hello HDFS! This is my first file." > test.txt
@@ -239,17 +241,24 @@ echo "Big Data is awesome!" >> test.txt
 echo "HDFS stores data in blocks." >> test.txt
 ```
 
+This creates `test.txt` in your **Linux home directory** on the server (`/home/<your_username>/test.txt`)
+
 **Verify local file:**
 ```bash
 cat test.txt
 ls -lh test.txt
 ```
 
----
+---the **server's Linux filesystem** → **HDFS**:
 
-### Step 4.2: Upload to HDFS
+```bash
+hdfs dfs -put test.txt /user/<your_username>/lab01/
+```
 
-Copy the file from local to HDFS:
+**What's happening:**
+- Source: `/home/<your_username>/test.txt` (Linux filesystem on the server)
+- Destination: `/user/<your_username>/lab01/test.txt` (HDFS distributed filesystem)
+- The `hdfs dfs -put` command is available because you're ON the server where Hadoop is installedy the file from local to HDFS:
 
 ```bash
 hdfs dfs -put test.txt /user/<your_username>/lab01/
@@ -265,6 +274,66 @@ hdfs dfs -copyFromLocal test.txt /user/<your_username>/lab01/test2.txt
 ```bash
 hdfs dfs -ls /user/<your_username>/lab01/
 ```
+
+---
+
+### 💡 Bonus: Upload from Your Laptop to HDFS
+
+If you have a file on your **local laptop** and want to upload it to HDFS:
+
+**Visual Flow:**
+```
+┌─────────────────────────┐
+│  Your Laptop            │
+│  ~/Downloads/data.csv   │
+└────────────┬────────────┘
+             │ scp (copy to server)
+             ↓
+┌─────────────────────────┐
+│  Cluster Server         │
+│  /home/student1/        │
+│  data.csv               │
+└────────────┬────────────┘
+             │ hdfs dfs -put
+             ↓
+┌─────────────────────────┐
+│  HDFS (Distributed)     │
+│  /user/student1/lab01/  │
+│  ┌──────────────────┐   │
+│  │ Block 1 (128MB)  │   │ → DataNode 1 + DataNode 2
+│  │ Block 2 (22MB)   │   │ → DataNode 1 + DataNode 2
+│  └──────────────────┘   │
+└─────────────────────────┘
+```
+
+**Option 1: Two-Step Process (Recommended for Beginners)**
+
+```bash
+# Step 1: From your laptop, copy file to server using scp
+# (Run this in a NEW terminal window on your laptop, NOT in SSH session)
+scp myfile.csv <your_username>@134.209.172.50:/home/<your_username>/
+
+# Step 2: SSH to server and upload to HDFS
+ssh <your_username>@134.209.172.50
+hdfs dfs -put myfile.csv /user/<your_username>/lab01/
+```
+
+**Option 2: One-Step with SSH Pipe (Advanced)**
+
+```bash
+# From your laptop - upload directly using pipe
+cat myfile.csv | ssh <your_username>@134.209.172.50 "hdfs dfs -put - /user/<your_username>/lab01/myfile.csv"
+```
+
+**Option 3: Using scp and hdfs in one command (Advanced)**
+
+```bash
+# From your laptop
+scp myfile.csv <your_username>@134.209.172.50:/tmp/ && \
+ssh <your_username>@134.209.172.50 "hdfs dfs -put /tmp/myfile.csv /user/<your_username>/lab01/ && rm /tmp/myfile.csv"
+```
+
+> 📌 **Best Practice:** For this lab, work directly on the server (Option 1 Step 2 only) to keep things simple. Use laptop uploads for your course project when you have large datasets.
 
 ---
 
@@ -359,16 +428,24 @@ hdfs dfs -cp /user/<your_username>/lab01/test.txt /user/<your_username>/data/inp
 # Rename a file
 hdfs dfs -mv /user/<your_username>/lab01/test2.txt /user/<your_username>/lab01/renamed.txt
 ```
-
----
-
-### Step 6.3: Download from HDFS
-
-Copy file from HDFS back to local:
+**HDFS** → **server's Linux filesystem**:
 
 ```bash
 hdfs dfs -get /user/<your_username>/lab01/test.txt downloaded_test.txt
 ```
+
+This downloads to: `/home/<your_username>/downloaded_test.txt` on the server
+
+**Verify:**
+```bash
+cat downloaded_test.txt
+```
+
+> 💡 **To get files to your laptop:** You would then use `scp` to copy from server to your computer:
+> ```bash
+> # On your laptop (in a new terminal, not SSH'd):
+> scp <your_username>@134.209.172.50:/home/<your_username>/downloaded_test.txt .
+> ```
 
 **Verify:**
 ```bash
