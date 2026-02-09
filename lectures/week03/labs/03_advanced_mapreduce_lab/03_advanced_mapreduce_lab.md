@@ -1,20 +1,27 @@
-# Lab 02: MapReduce Fundamentals
+# Lab 03: Advanced MapReduce Concepts (Python Simulation)
 
 **Course:** SE446 - Big Data Engineering  
-**Lab:** Week 3 - MapReduce Hands-On  
+**Lab:** Week 3 - Advanced Concepts  
 **Duration:** 60 minutes  
-**Prerequisites:** Completed Week 2 HDFS Lab, Python basics
+**Prerequisites:**
+
+- Completed **Lab 01** (Intro)
+- Completed **Lab 02** (Cluster Execution)
 
 ---
 
 ## 📋 Lab Objectives
 
+Now that you have run real jobs on the cluster (Lab 02), we will step back to purely **Python-based simulation** to understand complex algorithms that are hard to debug on a cluster.
+
 By the end of this lab, you will be able to:
-1. ✅ Implement MapReduce mappers and reducers in Python
-2. ✅ Apply MapReduce to analyze crime data
-3. ✅ Trace data flow through Map → Shuffle → Reduce phases
-4. ✅ Debug common MapReduce errors
-5. ✅ Chain multiple MapReduce stages
+
+1.  ✅ **Simulate** the Shuffle/Sort phase locally in Python.
+2.  ✅ Implement **Advanced Filtering** (finding arrests).
+3.  ✅ Calculate **Derived Metrics** (Arrest Rates %).
+4.  ✅ Chain **Multi-Stage Jobs** (e.g., finding the "Top 5" items).
+
+> **Note**: This lab runs entirely in a **Jupyter Notebook** or local Python script. It focuses on logic correctness before you deploy to the massive cluster.
 
 ---
 
@@ -23,9 +30,10 @@ By the end of this lab, you will be able to:
 ### Part 0: Environment Setup
 
 You can complete this lab in:
-- **Google Colab** (recommended for beginners)
+
+- **Google Colab** (recommended)
 - **Local Jupyter Notebook**
-- **VS Code with Jupyter extension**
+- **VS Code**
 
 ```python
 # Run this cell first to set up the MapReduce framework
@@ -35,12 +43,12 @@ import pandas as pd
 def map_reduce(data, mapper, reducer):
     """
     Simple MapReduce implementation in Python.
-    
+
     Parameters:
     - data: List of input records
     - mapper: Function (record) -> (key, value) or list of (key, value) or None
     - reducer: Function (key, [values]) -> (key, result)
-    
+
     Returns:
     - List of (key, result) tuples
     """
@@ -53,19 +61,19 @@ def map_reduce(data, mapper, reducer):
                 mapped.extend(result)
             else:
                 mapped.append(result)
-    
+
     # SHUFFLE PHASE
     shuffled = defaultdict(list)
     for key, value in mapped:
         shuffled[key].append(value)
-    
+
     # REDUCE PHASE
     results = []
     for key, values in shuffled.items():
         result = reducer(key, values)
         if result is not None:
             results.append(result)
-    
+
     return results
 
 print("✅ MapReduce framework ready!")
@@ -115,20 +123,21 @@ for word, count in sorted(word_counts, key=lambda x: x[1], reverse=True):
 ```
 
 ### 📝 Question 1.1
+
 What is the count for the word "world"? Why?
 
-**Your Answer:** _______________
+**Your Answer:** ******\_\_\_******
 
 ### Step 1.2: Trace the Data Flow
 
 For the input `["A B A", "B C"]`, manually trace each phase:
 
-| Phase | Input | Output |
-|-------|-------|--------|
-| Map (line 1) | "A B A" | ? |
-| Map (line 2) | "B C" | ? |
-| Shuffle | all pairs | ? |
-| Reduce | grouped | ? |
+| Phase        | Input     | Output |
+| ------------ | --------- | ------ |
+| Map (line 1) | "A B A"   | ?      |
+| Map (line 2) | "B C"     | ?      |
+| Shuffle      | all pairs | ?      |
+| Reduce       | grouped   | ?      |
 
 ```python
 # Verify your answer
@@ -157,12 +166,12 @@ except:
     # Fallback sample data
     crimes_df = pd.DataFrame({
         'ID': range(1, 1001),
-        'Primary Type': ['THEFT']*300 + ['BATTERY']*250 + ['ASSAULT']*150 + 
+        'Primary Type': ['THEFT']*300 + ['BATTERY']*250 + ['ASSAULT']*150 +
                        ['CRIMINAL DAMAGE']*100 + ['BURGLARY']*100 + ['OTHER OFFENSE']*100,
-        'District': [1]*100 + [2]*150 + [3]*200 + [4]*150 + [5]*100 + 
+        'District': [1]*100 + [2]*150 + [3]*200 + [4]*150 + [5]*100 +
                    [6]*100 + [7]*100 + [8]*100,
         'Arrest': [True]*350 + [False]*650,
-        'Location Description': ['STREET']*400 + ['RESIDENCE']*300 + 
+        'Location Description': ['STREET']*400 + ['RESIDENCE']*300 +
                                ['APARTMENT']*150 + ['RETAIL STORE']*150
     })
 
@@ -182,7 +191,7 @@ def crime_type_mapper(record):
     """
     Input: One crime record (dict)
     Output: (crime_type, 1)
-    
+
     Hint: Access the 'Primary Type' field from the record
     """
     # YOUR CODE HERE
@@ -200,9 +209,10 @@ for crime_type, count in sorted(crime_counts, key=lambda x: x[1], reverse=True)[
 ```
 
 ### 📝 Question 2.2
+
 What is the most common crime type in the dataset?
 
-**Your Answer:** _______________
+**Your Answer:** ******\_\_\_******
 
 ---
 
@@ -231,9 +241,10 @@ for district, count in sorted(district_counts, key=lambda x: x[1], reverse=True)
 ```
 
 ### 📝 Question 3.1
+
 Which district has the most crimes?
 
-**Your Answer:** _______________
+**Your Answer:** ******\_\_\_******
 
 ---
 
@@ -247,7 +258,7 @@ Which district has the most crimes?
 def arrest_filter_mapper(record):
     """
     Only emit crimes where an arrest was made.
-    
+
     Input: Crime record
     Output: (crime_type, 1) if arrest, else None
     """
@@ -266,9 +277,10 @@ for crime_type, count in sorted(arrest_counts, key=lambda x: x[1], reverse=True)
 ```
 
 ### 📝 Question 4.1
+
 For which crime type were the most arrests made?
 
-**Your Answer:** _______________
+**Your Answer:** ******\_\_\_******
 
 ---
 
@@ -282,7 +294,7 @@ For which crime type were the most arrests made?
 def arrest_rate_mapper(record):
     """
     Emit (crime_type, (arrested, total))
-    
+
     - arrested: 1 if arrest made, 0 otherwise
     - total: always 1
     """
@@ -293,15 +305,15 @@ def arrest_rate_mapper(record):
 def arrest_rate_reducer(crime_type, values):
     """
     Calculate arrest rate.
-    
+
     Input: list of (arrested, total) tuples
     Output: (crime_type, {'arrests': n, 'total': m, 'rate': %})
     """
     total_arrests = sum(v[0] for v in values)
     total_crimes = sum(v[1] for v in values)
-    
+
     rate = (total_arrests / total_crimes * 100) if total_crimes > 0 else 0
-    
+
     return (crime_type, {
         'arrests': total_arrests,
         'total': total_crimes,
@@ -321,14 +333,16 @@ for crime_type, stats in sorted(arrest_rates, key=lambda x: x[1]['rate'], revers
 ```
 
 ### 📝 Question 5.1
+
 Which crime type has the highest arrest rate? What is the rate?
 
-**Your Answer:** _______________
+**Your Answer:** ******\_\_\_******
 
 ### 📝 Question 5.2
+
 Why might some crime types have higher arrest rates than others?
 
-**Your Answer:** _______________
+**Your Answer:** ******\_\_\_******
 
 ---
 
@@ -337,6 +351,7 @@ Why might some crime types have higher arrest rates than others?
 ### Step 6.1: Find Top 5 Crime Types
 
 **Approach**: Two MapReduce jobs
+
 1. Count crimes by type
 2. Find top 5 from the counts
 
@@ -368,9 +383,10 @@ for rank, (crime_type, count) in enumerate(top_5[0][1], 1):
 ```
 
 ### 📝 Question 6.1
+
 Why do we need TWO MapReduce stages for finding top 5?
 
-**Your Answer:** _______________
+**Your Answer:** ******\_\_\_******
 
 ---
 
@@ -425,16 +441,16 @@ If your dataset has a 'Date' column, analyze crimes by hour of day.
 
 ## ✅ Lab Completion Checklist
 
-| Task | Status |
-|------|--------|
-| Implemented word count mapper/reducer | ⬜ |
-| Traced MapReduce data flow manually | ⬜ |
-| Counted crimes by type | ⬜ |
-| Counted crimes by district | ⬜ |
-| Filtered crimes with arrests | ⬜ |
-| Calculated arrest rates | ⬜ |
-| Implemented multi-stage top 5 | ⬜ |
-| Answered all questions | ⬜ |
+| Task                                  | Status |
+| ------------------------------------- | ------ |
+| Implemented word count mapper/reducer | ⬜     |
+| Traced MapReduce data flow manually   | ⬜     |
+| Counted crimes by type                | ⬜     |
+| Counted crimes by district            | ⬜     |
+| Filtered crimes with arrests          | ⬜     |
+| Calculated arrest rates               | ⬜     |
+| Implemented multi-stage top 5         | ⬜     |
+| Answered all questions                | ⬜     |
 
 ---
 
@@ -445,7 +461,6 @@ If your dataset has a 'Date' column, analyze crimes by hour of day.
 1. **Completed Notebook**
    - All code cells executed
    - All questions answered
-   
 2. **GitHub Commit**
    - Push to your team's repository
    - Folder: `milestone_2_mapreduce/student_<yourname>/`
@@ -462,6 +477,7 @@ If your dataset has a 'Date' column, analyze crimes by hour of day.
 ### Common Errors
 
 **1. TypeError: 'NoneType' object is not iterable**
+
 ```python
 # Problem: Mapper returns None but framework tries to iterate
 # Solution: Check if result is None before processing
@@ -472,6 +488,7 @@ if result is not None:
 ```
 
 **2. KeyError: 'Primary Type'**
+
 ```python
 # Problem: Column name mismatch
 # Solution: Check actual column names
@@ -479,6 +496,7 @@ print(crime_records[0].keys())
 ```
 
 **3. Wrong counts**
+
 ```python
 # Problem: Mapper returns wrong type
 # Solution: Ensure mapper returns (key, value) tuple, not just value

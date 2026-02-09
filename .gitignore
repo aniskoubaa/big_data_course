@@ -15,7 +15,7 @@ students_list/
 _*
 **/_*
 
-
+*.sh
 textbook/
 
 # Quizzes
