@@ -20,6 +20,12 @@ Your mission is to build a **MapReduce pipeline** on the department's Hadoop Clu
 
 - ✅ **Completed Lab 02**: You should have completed [Lab 02: Intermediate MapReduce](../lectures/week03/labs/02_intermediate_mapreduce_python/02_intermediate_mapreduce_lab.md).
   - _Why?_ Lab 02 provides the base code for parsing the Chicago Crime CSV (`mapper_district.py`) and summing counts (`reducer_sum.py`). You will adapt this code for this project.
+  - 📖 **Lab Execution Report**: Review [Lab 02 Execution Report](../lectures/week03/labs/02_intermediate_mapreduce_python/02_intermediate_mapreduce_lab_execution_report.md) for:
+    - Complete worked example with real cluster execution
+    - Dataset schema reference (column indices for all fields)
+    - Step-by-step execution workflow
+    - **Section 8: "Preparing for Milestone 1"** — shows exactly how to adapt the lab code for each project task
+    - Full troubleshooting guide with solutions to common errors
 - **Cluster Access**: This is private info (IP, Key). **Do not commit generated keys or IPs to GitHub**. You received the access instructions via email.
 
 ---
@@ -78,7 +84,22 @@ The dataset is shared on the HDFS cluster at:
 
 ---
 
+### 📚 Task Adaptation Guide
+
+Unsure how to start? The [Lab 02 Execution Report — Section 8](../lectures/week03/labs/02_intermediate_mapreduce_python/02_intermediate_mapreduce_lab_execution_report.md#8-preparing-for-milestone-1) shows:
+
+- **Exact code changes** needed for each task (from District → Crime Type → Location → Year → Arrest)
+- **Column index reference table** for quick lookup
+- **Date parsing example** for Task 4 (the tricky one)
+- Which tasks need filtering vs. counting all records
+
+The reducer (`reducer_sum.py` from Lab 02) works for **all tasks** without modification.
+
+---
+
 ## Quick Start: Running MapReduce on the Cluster
+
+> **💡 First Time?** Read the [Lab 02 Execution Report](../lectures/week03/labs/02_intermediate_mapreduce_python/02_intermediate_mapreduce_lab_execution_report.md) first — it shows a complete end-to-end example with the same dataset and explains every step in detail.
 
 This is all you need to run a mapper + reducer on the Hadoop cluster.
 
