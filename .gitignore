@@ -11,6 +11,8 @@ cluster_setup/
 student_access/
 students_list/
 
+private/
+
 # Private files and folders (starting with underscore)
 _*
 **/_*
