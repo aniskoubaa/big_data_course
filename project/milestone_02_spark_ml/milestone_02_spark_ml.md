@@ -21,12 +21,71 @@ Your mission is to upgrade your analytics from batch counting (MapReduce) to **i
 
 ---
 
-## 2. Prerequisites & Resources
+## 2. Prerequisites & Local Setup
+
+### Knowledge Prerequisites
 
 - Completed **Week 7-9 lectures and labs** (Spark Core, Tuning, MLlib)
 - The **W09B notebook** (`SE446_W09B_spark_mllib_lab.ipynb`) -- this is your reference implementation
-- **Cluster access** (same credentials as M1)
-- **PySpark installed locally** (`pip install pyspark numpy`)
+- Familiar with `Pipeline`, `StringIndexer`, `VectorAssembler`, `RandomForestClassifier`
+
+### Software Prerequisites (Install on Your Laptop)
+
+You must have the following installed **before starting**:
+
+| Software | Version | Install Command / Link |
+|----------|---------|----------------------|
+| **Python** | 3.8+ | [python.org/downloads](https://www.python.org/downloads/) |
+| **Java (JDK)** | 11 or 17 | [adoptium.net](https://adoptium.net/) (Temurin JDK recommended) |
+| **PySpark** | 3.5+ | `pip install pyspark` |
+| **NumPy** | any | `pip install numpy` |
+| **Jupyter** | any | `pip install jupyter` |
+| **matplotlib** | any | `pip install matplotlib` (for Task 3 visualization) |
+
+### Quick Verification
+
+Run these commands to verify everything works:
+
+```bash
+# Check Python
+python3 --version          # should print 3.8+
+
+# Check Java (REQUIRED by Spark)
+java -version              # should print 11.x or 17.x
+
+# Check PySpark
+python3 -c "import pyspark; print(pyspark.__version__)"  # should print 3.5+
+
+# Test Spark runs
+python3 -c "
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.master('local[*]').getOrCreate()
+print(f'Spark {spark.version} is working!')
+spark.stop()
+"
+```
+
+If `java -version` fails, Spark will not work. Install Java first.
+
+### Common Setup Issues
+
+| Problem | Solution |
+|---------|----------|
+| `java: command not found` | Install JDK 11 or 17 from [adoptium.net](https://adoptium.net/). On Mac: `brew install openjdk@17` |
+| `JAVA_HOME is not set` | Add to your shell profile: `export JAVA_HOME=$(/usr/libexec/java_home)` (Mac) or set it to your JDK path |
+| `ModuleNotFoundError: No module named 'pyspark'` | Run `pip install pyspark` |
+| `Py4JJavaError` on Spark start | Java version mismatch. PySpark 3.5 needs Java 11 or 17 (not 8, not 21) |
+| Spark logs flood the terminal | Add `spark.sparkContext.setLogLevel("WARN")` after creating SparkSession |
+
+### Cluster Access
+
+- Same credentials as M1 (SSH to the cluster)
+- Dataset at `hdfs:///data/chicago_crimes.csv`
+- If you lost your credentials, contact the instructor
+
+### Google Colab Alternative
+
+If you cannot install Java locally, use **Google Colab** as a fallback. The W09B notebook auto-installs PySpark on Colab. However, you still need cluster access for Tasks 10-11.
 
 ---
 
