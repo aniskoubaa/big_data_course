@@ -245,23 +245,18 @@ Your repository `README.md` must include:
 
 ### 4. Submission
 
-- **One GitHub repository** per group containing **both M1 and M2**
+- **One GitHub repository** per group for M2
 - Submit via **AssessX Group Project** (link will be announced)
 - Ensure the instructor (`akoubaa`) is a collaborator on the repo
-- The repository is your single deliverable -- everything must be there
 
 **Repository structure:**
 ```
-se446-project-group-X/
-├── README.md                  ← main report (covers both M1 and M2)
-├── milestone_01/
-│   ├── src/                   ← M1 mapper/reducer scripts
-│   ├── scripts/               ← M1 shell scripts
-│   └── output/                ← M1 results
-└── milestone_02/
-    ├── M2_Spark_ML_GroupX.ipynb  ← M2 notebook
-    ├── m2_spark_ml.py           ← M2 standalone script
-    └── output/                  ← M2 results, screenshots
+se446-m2-group-X/
+├── README.md                     ← project report
+├── M2_Spark_ML_GroupX.ipynb      ← main notebook
+├── m2_spark_ml.py                ← standalone script for spark-submit
+├── output/                       ← results, screenshots, evidence
+└── docs/                         ← (optional) additional documentation
 ```
 
 ---

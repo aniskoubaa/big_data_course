@@ -4,7 +4,7 @@
 
 **Group Size**: 2-5 Students
 
-**Submission**: Single GitHub repository via **AssessX Group Project** (same repo used for M2)
+**Submission**: GitHub repository (separate from M2)
 
 ## 1. Scenario: The Digital Detectives
 

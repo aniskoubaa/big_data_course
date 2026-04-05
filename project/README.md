@@ -28,24 +28,12 @@ M2 builds on M1: students revisit the same analytical questions using Spark (fas
 
 ## Submission
 
-- **One GitHub repository** per group containing **both M1 and M2**
-- Submit via **AssessX Group Project**
-- The repository is the single deliverable
+Each milestone has its own GitHub repository:
 
-### Repository Structure
-
-```
-se446-project-group-X/
-├── README.md                  <-- main report (covers both M1 and M2)
-├── milestone_01/
-│   ├── src/                   <-- M1 mapper/reducer scripts
-│   ├── scripts/               <-- M1 shell scripts
-│   └── output/                <-- M1 results
-└── milestone_02/
-    ├── M2_Spark_ML_GroupX.ipynb  <-- M2 notebook
-    ├── m2_spark_ml.py           <-- M2 standalone script
-    └── output/                  <-- M2 results, screenshots
-```
+| Milestone | Repository | Submission |
+|-----------|-----------|------------|
+| M1 | `se446-project-group-X` | Submitted separately (already done) |
+| M2 | `se446-m2-group-X` | Via **AssessX Group Project** |
 
 ## Group Policy
 
