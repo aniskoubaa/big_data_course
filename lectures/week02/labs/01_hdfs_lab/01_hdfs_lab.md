@@ -42,7 +42,7 @@ ssh <your_username>@134.209.172.50
 **Example:**
 
 ```bash
-ssh akoubaa@134.209.172.50
+ssh hadoop@134.209.172.50
 ```
 
 Enter your password when prompted (from your credentials email).

@@ -12,7 +12,7 @@ student_access/
 students_list/
 
 private/
-
+assessments/
 # Private files and folders (starting with underscore)
 _*
 **/_*
@@ -48,6 +48,7 @@ quizzes/
 # OS files
 .DS_Store
 Thumbs.db
+~$*
 
 # IDE
 .vscode/
