@@ -2,9 +2,9 @@
 
 **Due Date**: Saturday, February 21, 2024
 
-**Group Size**: 3-5 Students
+**Group Size**: 2-5 Students
 
-**Submission**: Instructions will be announced later.
+**Submission**: Single GitHub repository via **AssessX Group Project** (same repo used for M2)
 
 ## 1. Scenario: The Digital Detectives
 

@@ -2,9 +2,9 @@
 
 **Due Date**: Sunday, Week 11, 23:59
 
-**Group Size**: 3-5 Students (same groups as M1)
+**Group Size**: 2-5 Students (same groups as M1)
 
-**Submission**: Jupyter Notebook (`.ipynb`) + GitHub repository
+**Submission**: Single GitHub repository (contains both M1 and M2) via **AssessX Group Project**
 
 ## 1. Scenario: From Counting to Predicting
 
@@ -245,13 +245,30 @@ Your repository `README.md` must include:
 
 ### 4. Submission
 
-- Push all code to your team's GitHub repository
-- Submit the notebook + script via Moodle by 23:59 on the due date
+- **One GitHub repository** per group containing **both M1 and M2**
+- Submit via **AssessX Group Project** (link will be announced)
 - Ensure the instructor (`akoubaa`) is a collaborator on the repo
+- The repository is your single deliverable -- everything must be there
+
+**Repository structure:**
+```
+se446-project-group-X/
+├── README.md                  ← main report (covers both M1 and M2)
+├── milestone_01/
+│   ├── src/                   ← M1 mapper/reducer scripts
+│   ├── scripts/               ← M1 shell scripts
+│   └── output/                ← M1 results
+└── milestone_02/
+    ├── M2_Spark_ML_GroupX.ipynb  ← M2 notebook
+    ├── m2_spark_ml.py           ← M2 standalone script
+    └── output/                  ← M2 results, screenshots
+```
 
 ---
 
 ## 7. Evaluation Criteria
+
+### Group Score (Project Quality)
 
 | Component | Points | Details |
 |-----------|:------:|---------|
@@ -259,9 +276,33 @@ Your repository `README.md` must include:
 | **Phase B**: ML Pipeline (Tasks 5-7) | 30 | Pipeline correctness, 3 models evaluated, interpretation |
 | **Phase B**: CrossValidator (Task 8) | 10 | Grid search, results table, best model selection |
 | **Phase C**: Deployment Modes (Tasks 9-11) | 15 | Local + client + spark-submit evidence |
-| **Report**: README completeness | 10 | All sections present, M1 vs M2 comparison |
-| **Git**: Commit history + PRs | 15 | Every member committed, branches + PRs used |
+| **Report**: README completeness | 15 | All sections present, M1 vs M2 comparison |
+| **Git**: Branches + PRs used | 10 | Proper Git workflow followed |
 | **Total** | **100** | |
+
+### Individual Grade Adjustment (GitHub Activity)
+
+The group score above is the **base**. Each member's **individual grade** is then adjusted based on their **personal GitHub contribution**, analyzed automatically via AssessX:
+
+| Contribution Level | Grade Modifier |
+|-------------------|----------------|
+| Strong contributor (meaningful commits, PRs, code authorship) | 100% of group score |
+| Moderate contributor (some commits, participated in reviews) | 70-90% of group score |
+| Minimal contributor (few or trivial commits) | 30-60% of group score |
+| No commits / ghost member | **0%** (zero regardless of group score) |
+
+**What counts as contribution:**
+- Commits with meaningful code changes (not just whitespace or README edits)
+- Pull requests authored or reviewed
+- Issues created or resolved
+- Code authorship visible in `git blame`
+
+**What does NOT count:**
+- A single "mega commit" at the end (suggests copy-paste, not development)
+- Commits authored by another member pushed under your name
+- Identical commits across multiple members
+
+**The rule is simple: if your GitHub username does not appear in the commit history for substantive code, your individual grade is zero.**
 
 ---
 
