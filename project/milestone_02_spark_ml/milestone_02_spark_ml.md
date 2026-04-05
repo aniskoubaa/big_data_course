@@ -251,8 +251,6 @@ spark-submit \
 
 ## 5. Work Distribution & Git Workflow
 
-Same rules as M1:
-
 ### One Student, One Task Rule
 
 Assign tasks to members. Every member must commit code for their assigned tasks.
@@ -266,13 +264,67 @@ Assign tasks to members. Every member must commit code for their assigned tasks.
 | Member C | Tasks 5-7 (ML pipeline + evaluation) | B |
 | Member D | Tasks 8-11 (Tuning + deployment modes) | B+C |
 
+### Code Authorship -- Put Your Name on Your Code
+
+Every code cell or script section you write **must include a comment header** with your name and the task. This is how we verify who wrote what.
+
+**Format for notebook cells:**
+
+```python
+# ============================================
+# Task 5: Feature Engineering Pipeline
+# Author: Ali Al-Rashid (ID: 12345)
+# ============================================
+
+crime_indexer = StringIndexer(
+    inputCol="Primary Type",
+    outputCol="crime_index",
+    handleInvalid="skip"
+)
+# ... rest of your code
+```
+
+**Format for Python scripts (`m2_spark_ml.py`):**
+
+```python
+# ============================================
+# SE446 - Milestone 2: Spark ML Pipeline
+# Group X
+#
+# Task 5-6: Ali Al-Rashid (ID: 12345)
+# Task 7:   Sara Ahmad (ID: 67890)
+# Task 8:   Omar Hassan (ID: 11111)
+# ============================================
+```
+
+**Format for notebook markdown cells (before your code):**
+
+```markdown
+### Task 3: Crime Trend Over Years
+**Author: Sara Ahmad (ID: 67890)**
+```
+
+If your name does not appear on any code, you will be treated as a non-contributor.
+
 ### Git Workflow
 
-Same as M1:
-1. Branch per task: `git checkout -b task5-ali`
-2. Commit code to branch
-3. Open Pull Request to `main`
-4. Group leader reviews and merges
+You can use **either** of these two workflows. Both are acceptable:
+
+**Option A: Branch + Pull Request (recommended)**
+1. Create a branch for your task: `git checkout -b task5-ali`
+2. Write and commit your code to the branch
+3. Push the branch: `git push origin task5-ali`
+4. Open a **Pull Request** on GitHub to merge into `main`
+5. Group leader (or another member) reviews and merges
+
+**Option B: Branch + Merge locally**
+1. Create a branch: `git checkout -b task3-sara`
+2. Write and commit your code
+3. Switch to main: `git checkout main`
+4. Merge: `git merge task3-sara`
+5. Push: `git push origin main`
+
+**What matters:** Your GitHub username must appear in the commit history with meaningful code changes. One mega-commit at the end does not count.
 
 ---
 
