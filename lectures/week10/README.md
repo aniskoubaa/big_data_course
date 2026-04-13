@@ -150,7 +150,7 @@ df.groupBy(window("timestamp", "10 minutes", "2 minutes"), "crime_type").count()
 
 ## Cluster Setup
 
-Kafka runs alongside the existing HDFS/YARN/Spark stack on `134.209.172.50`:
+Kafka runs alongside the existing HDFS/YARN/Spark stack on `MASTER_IP`:
 
 | Service | Port | Purpose |
 |---------|------|---------|
