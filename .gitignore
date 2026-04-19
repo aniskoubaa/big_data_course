@@ -64,8 +64,19 @@ logs/
 *_Solutions.ipynb
 *_SOLUTIONS.ipynb
 *_solutions.ipynb
+*_solutions.pdf
+*_solutions.tex
 *_executed.ipynb
 *_output.md
 *_backup.tex
 instructor/
+
+# Review session slides (contain solutions)
+*_review_session_slides.pdf
+
+# AssessX question banks (contain solutions and rubrics)
+*_assessx.json
+
+# Instructor lecture notes and narration scripts
+**/slides/notes/
 
