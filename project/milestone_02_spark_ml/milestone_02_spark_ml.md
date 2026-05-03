@@ -199,21 +199,6 @@ For each model, report:
 
 **Deliverable**: Feature importance bar chart (or ASCII table) + written interpretation.
 
-#### Task 8: Hyperparameter Tuning with CrossValidator
-
-Use `CrossValidator` + `ParamGridBuilder` to tune the Random Forest:
-
-| Parameter | Values to Try |
-|-----------|--------------|
-| `numTrees` | 50, 100, 200 |
-| `maxDepth` | 3, 5, 10 |
-
-- Use 3-fold cross-validation with AUC-ROC as the metric
-- Report which combination performed best
-- Report the best model's AUC on the test set
-
-**Deliverable**: CrossValidator results table + best model metrics.
-
 ---
 
 ### Phase C: Deployment Modes
@@ -240,11 +225,16 @@ You must demonstrate your code running in **three execution modes**:
 spark-submit \
     --master yarn \
     --deploy-mode client \
+    --driver-memory 512m \
     --num-executors 2 \
     --executor-memory 1g \
-    --executor-cores 2 \
+    --executor-cores 1 \
+    --conf spark.driver.maxResultSize=128m \
+    --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=python3.12 \
+    --conf spark.executorEnv.PYSPARK_PYTHON=python3.12 \
     m2_spark_ml.py
 ```
+> **Cluster note:** Our cluster's YARN max allocation is `<memory:1536, vCores:1>` per container. Use `--executor-cores 1`. The master VM is small (4 GB), so cap driver memory with `--driver-memory 512m`. For Phase B (Tasks 5-7), sample the data with `df.sample(0.05, seed=42)` or use `hdfs:///data/chicago_crimes_sample.csv` so training fits the cluster's memory budget. Phase A (Tasks 1-4) still runs on the full HDFS dataset.
 - **Evidence**: Full terminal output of the `spark-submit` command showing job completion and results
 
 ---
@@ -262,7 +252,7 @@ Assign tasks to members. Every member must commit code for their assigned tasks.
 | Member A | Tasks 1-2 (DataFrame + SQL analytics) | A |
 | Member B | Tasks 3-4 (Trends + arrest rate analysis) | A |
 | Member C | Tasks 5-7 (ML pipeline + evaluation) | B |
-| Member D | Tasks 8-11 (Tuning + deployment modes) | B+C |
+| Member D | Tasks 9-11 (Deployment modes) | C |
 
 ### Code Authorship -- Put Your Name on Your Code
 
@@ -333,11 +323,10 @@ You can use **either** of these two workflows. Both are acceptable:
 ### 1. Jupyter Notebook: `M2_Spark_ML_GroupX.ipynb`
 
 A single notebook containing:
-- All Tasks 1-8 with code, output, and written analysis
+- All Tasks 1-7 with code, output, and written analysis
 - Clear markdown headers for each task
 - The 3-model comparison table
 - Feature importance output
-- CrossValidator results
 
 ### 2. Python Script: `m2_spark_ml.py`
 
@@ -378,9 +367,8 @@ se446-m2-group-X/
 
 | Component | Points | Details |
 |-----------|:------:|---------|
-| **Phase A**: Spark DataFrame Analytics (Tasks 1-4) | 20 | Correct results, Spark SQL usage, M1 comparison |
-| **Phase B**: ML Pipeline (Tasks 5-7) | 30 | Pipeline correctness, 3 models evaluated, interpretation |
-| **Phase B**: CrossValidator (Task 8) | 10 | Grid search, results table, best model selection |
+| **Phase A**: Spark DataFrame Analytics (Tasks 1-4) | 25 | Correct results, Spark SQL usage, M1 comparison |
+| **Phase B**: ML Pipeline (Tasks 5-7) | 35 | Pipeline correctness, 3 models evaluated, interpretation |
 | **Phase C**: Deployment Modes (Tasks 9-11) | 15 | Local + client + spark-submit evidence |
 | **Report**: README completeness | 15 | All sections present, M1 vs M2 comparison |
 | **Git**: Branches + PRs used | 10 | Proper Git workflow followed |
