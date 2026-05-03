@@ -220,13 +220,13 @@ You must demonstrate your code running in **three execution modes**:
 #### Task 11: Cluster Execution -- spark-submit
 
 - Convert your ML pipeline (Phase B, Tasks 5-7) into a standalone Python script (`.py`)
-- Submit it to the cluster using `spark-submit`:
+- Submit it to the cluster using `spark-submit` in **cluster** deploy mode (the driver runs on a worker, which avoids out-of-memory issues on the small master VM):
 ```bash
 spark-submit \
     --master yarn \
-    --deploy-mode client \
+    --deploy-mode cluster \
     --driver-memory 512m \
-    --num-executors 2 \
+    --num-executors 1 \
     --executor-memory 1g \
     --executor-cores 1 \
     --conf spark.driver.maxResultSize=128m \
@@ -234,7 +234,11 @@ spark-submit \
     --conf spark.executorEnv.PYSPARK_PYTHON=python3.12 \
     m2_spark_ml.py
 ```
-> **Cluster note:** Our cluster's YARN max allocation is `<memory:1536, vCores:1>` per container. Use `--executor-cores 1`. The master VM is small (4 GB), so cap driver memory with `--driver-memory 512m`. For Phase B (Tasks 5-7), sample the data with `df.sample(0.05, seed=42)` or use `hdfs:///data/chicago_crimes_sample.csv` so training fits the cluster's memory budget. Phase A (Tasks 1-4) still runs on the full HDFS dataset.
+> **Cluster notes:**
+> - Use `--deploy-mode cluster`. The master VM is small (4 GB) and shared with Hadoop daemons; running the driver on master in client mode is OOM-killed.
+> - YARN max allocation is `<memory:1536, vCores:1>` per container — keep `--executor-cores 1`.
+> - For Phase B (Tasks 5-7), sample the data with `df.sample(0.05, seed=42)` or use `hdfs:///data/chicago_crimes_sample.csv` so training fits the cluster's memory budget. Phase A (Tasks 1-4) still runs on the full HDFS dataset.
+> - **Evidence for Task 11:** since cluster-mode driver output is not printed to your terminal, retrieve it with `yarn logs -applicationId <appId>` (the appId is shown in the spark-submit output). Save the relevant excerpts to `output/spark_submit/run.log`.
 - **Evidence**: Full terminal output of the `spark-submit` command showing job completion and results
 
 ---
